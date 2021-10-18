@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey
+from sqlalchemy import Column, Integer, String, ARRAY
 from sqlalchemy.orm import relationship
 
-from database.db import Base, engine
+from service.database.db import Base, engine
 
 
 class Wall(Base):
@@ -20,8 +20,6 @@ class Post(Base):
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
-    wall_id = Column(Integer, ForeignKey(Wall.id), index=True, nullable=False)
-
     uid = Column(Integer)
     link = Column(String)
     group = Column(Integer)

@@ -5,7 +5,7 @@ import logging
 from flask import Flask, request
 from service.config import emotion_url
 
-from database.loader import save_wall, save_post
+from service.database.loader import save_wall, save_post
 
 
 app = Flask(__name__)

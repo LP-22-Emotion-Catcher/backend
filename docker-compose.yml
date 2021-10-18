@@ -3,10 +3,10 @@ services:
   db:
     image: postgres:14.0
     networks:
-      - bookmarket
+      - emotions
     env_file: .env
     ports:
       - 5432:5432
 
 networks:
-  bookmarket:
+  emotions:
