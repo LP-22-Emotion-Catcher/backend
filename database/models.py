@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, ARRAY, ForeignKey
 from sqlalchemy.orm import relationship
 
 from database.db import Base, engine
@@ -8,7 +8,7 @@ class Wall(Base):
     __tablename__ = 'walls'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(Integer)
     link = Column(String)
     posts = relationship('Post', lazy='joined', backref='walls')
 
@@ -24,14 +24,15 @@ class Post(Base):
 
     uid = Column(Integer)
     link = Column(String)
+    group = Column(Integer)
     author = Column(Integer)
     text = Column(String)
-    created = Column(Date)
+    created = Column(String)
     likes = Column(Integer)
     reposts = Column(Integer)
     comments = Column(Integer)
     views = Column(Integer)
-    emotion = Column(String)
+    emotion = Column(ARRAY(String))
 
     wall = relationship('Wall', lazy='joined', backref='posts')
 

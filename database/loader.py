@@ -4,7 +4,7 @@ from database.models import Wall, Post
 
 def save_wall(data):
     walls = []
-    wall = {'name': data['uid'],
+    wall = {'name': data['wall'],
             'link': data['link']
             }
     walls.append(wall)
@@ -12,6 +12,11 @@ def save_wall(data):
     db_session.bulk_insert_mappings(Wall, walls, return_defaults=True)
     db_session.commit()
     return walls
+
+
+def get_wall(data):
+    wall = data['wall']
+    return wall
 
 
 def save_post(data):
@@ -26,6 +31,7 @@ def save_post(data):
             'views': data['views'],
             'emotion': data['emotion'],
             'created': data['created'],
+            'group': data['wall'],
             }
     posts.append(post)
 
