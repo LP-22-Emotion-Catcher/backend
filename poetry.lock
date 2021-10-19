@@ -266,7 +266,7 @@ testing = ["pytest", "pytest-benchmark"]
 name = "psycopg2-binary"
 version = "2.9.1"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -422,7 +422,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "58c9175f8f81372adea2d8a4a046ca06ca6e70401a0cfeaecc8d37e5d3c8e523"
+content-hash = "1b24856765ce4f039983cab27e4f1addbfbb02a9726a3825b9bde84d1433a493"
 
 [metadata.files]
 anyio = [
