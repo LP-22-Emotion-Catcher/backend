@@ -12,6 +12,6 @@ COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --no-root --no-dev
 
-COPY . .
+COPY service ./service
 
-CMD ["python3", "-m", "service", "run", "--host=0.0.0.0"]
+CMD ["python3", "-m", "service"]
