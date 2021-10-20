@@ -8,5 +8,14 @@ services:
     ports:
       - 5432:5432
 
+  app:
+    build: .
+    env_file: .env
+    networks:
+      - backend
+    ports:
+      - 5001:5001
+
 networks:
   emotions:
+  backend:
