@@ -6,7 +6,7 @@ from flask import Flask, request
 from service.config import emotion_url
 
 from service.database.loader import save_wall, save_post
-
+from service.database.queries import get_last_post_id
 
 app = Flask(__name__)
 
@@ -22,6 +22,14 @@ def process_message():
     save_wall(data)
     save_post(data)
     return '', http.HTTPStatus.NO_CONTENT
+
+
+@app.route("/api/v1/walls", methods=['GET'])
+def process_wall():
+    data = request.json
+    wall_id = data['wall']
+    last_post_id = get_last_post_id(wall_id)
+    return last_post_id
 
 
 if __name__ == '__main__':
