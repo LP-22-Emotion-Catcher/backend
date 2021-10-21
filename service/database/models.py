@@ -10,7 +10,7 @@ class Wall(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Integer)
     link = Column(String)
-    posts = relationship('Post', lazy='joined', backref='walls')
+    # posts = relationship('Post', lazy='joined', backref='walls')
 
     def __repr__(self):
         return f'Wall id: {self.id}, name: {self.name}'
@@ -32,7 +32,7 @@ class Post(Base):
     views = Column(Integer)
     emotion = Column(ARRAY(String))
 
-    wall = relationship('Wall', lazy='joined', backref='posts')
+    # wall = relationship('Wall', lazy='joined', backref='posts')
 
     def __repr__(self):
         return f'Post id: {self.id}, text: {self.text}'
