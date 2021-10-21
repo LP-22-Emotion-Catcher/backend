@@ -7,6 +7,13 @@
             "request": "launch",
             "module": "service",
             "console": "internalConsole"
-        }
+        },
+        {
+            "name": "db.create",
+            "type": "python",
+            "request": "launch",
+            "module": "service.database.models",
+            "console": "internalConsole"
+      }
     ]
 }

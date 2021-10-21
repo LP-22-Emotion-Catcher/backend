@@ -1,5 +1,4 @@
 # Our config
-config.py
 *.db
 *.csv
 *.pyc
