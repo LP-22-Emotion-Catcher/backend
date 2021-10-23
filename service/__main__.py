@@ -1,12 +1,13 @@
 import http
 import httpx
 import logging
+from dataclasses import asdict
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from service.config import emotion_url
 
 from service.database.loader import save_wall, save_post, update_last_post_id
-from service.database.queries import check_wall_exists, get_last_post_id
+from service.database import queries
 
 app = Flask(__name__)
 
@@ -19,16 +20,35 @@ def process_message():
     emotion = httpx.post(emotion_url, json=payload)
     logging.info('%s: %s\n\n', emotion.json()['emotions'], text)
     data['emotion'] = emotion.json()['emotions']
+    print(data)
     save_post(data)
-    if not check_wall_exists(data['wall']):
-        save_wall(data)
-    update_last_post_id(data['uid'])
-    return '', http.HTTPStatus.NO_CONTENT
+    update_last_post_id(wall_id=data['wall'], post_id=data['uid'])
+    return '', http.HTTPStatus.CREATED
+
+
+@app.route('/api/v1/walls', methods=['POST'])
+def add_wall():
+    data = request.json
+    save_wall(data)
+    return '', http.HTTPStatus.CREATED
 
 
 @app.route("/api/v1/walls/<uid>", methods=['GET'])
 def process_wall(uid):
-    return get_last_post_id(uid)
+    return queries.get_last_post_id(uid)
+
+
+@app.route("/api/v1/walls/", methods=['GET'])
+def get_walls():
+    walls = queries.get_walls()
+    return jsonify(walls), http.HTTPStatus.OK
+
+
+@app.route('/api/v1/walls/<uid>/posts/', methods=['GET'])
+def get_posts(uid):
+    emotion = request.args.get('emotion')
+    posts = queries.get_posts(uid, emotion)
+    return jsonify(posts), http.HTTPStatus.OK
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ class Wall(Base):
     __tablename__ = 'walls'
 
     id = Column(Integer, primary_key=True)
-    name = Column(Integer)
+    wall_id = Column(Integer)
     link = Column(String)
     last_post_id = Column(Integer)
     # posts = relationship('Post', lazy='joined', backref='walls')
@@ -21,10 +21,10 @@ class Post(Base):
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
-    uid = Column(Integer)
+    post_id = Column(Integer)
     link = Column(String)
-    group = Column(Integer)
-    author = Column(Integer)
+    wall_id = Column(Integer)
+    author_id = Column(Integer)
     text = Column(String)
     created = Column(String)
     likes = Column(Integer)

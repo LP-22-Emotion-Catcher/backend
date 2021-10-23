@@ -1,13 +1,35 @@
 from service.database.db import db_session
 from service.database.models import Post, Wall
+from dataclasses import dataclass
 
 
 def get_last_post_id(wall_id):
-    last_post_id = db_session.query(Wall.last_post_id).filter(Wall.name == wall_id).first()
+    last_post_id = db_session.query(Wall.last_post_id).filter(Wall.wall_id == wall_id).first()
     if last_post_id:
         return str(last_post_id)
     else:
         return None
+
+
+@dataclass
+class WallConfig:
+    uid: int
+    wall_id: int
+    link: str
+    last_post_id: int
+
+
+def get_walls():
+    walls = Wall.query.all()
+    return [
+        WallConfig(
+            uid=wall.id,
+            wall_id=wall.wall_id,
+            link=wall.link,
+            last_post_id=wall.last_post_id,
+        )
+        for wall in walls
+    ]
 
 
 # Old way, currently not using

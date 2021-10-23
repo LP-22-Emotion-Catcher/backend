@@ -4,7 +4,7 @@ from service.database.models import Wall, Post
 
 def save_wall(data):
     walls = []
-    wall = {'name': data['wall'],
+    wall = {'wall_id': data['wall'],
             'link': data['link'],
             'last_post_id': data['uid']
             }
@@ -17,9 +17,9 @@ def save_wall(data):
 
 def save_post(data):
     posts = []
-    post = {'uid': data['uid'],
+    post = {'post_id': data['uid'],
             'link': data['link'],
-            'author': data['author'],
+            'author_id': data['author'],
             'text': data['text'],
             'likes': data['likes'],
             'reposts': data['reposts'],
@@ -27,7 +27,7 @@ def save_post(data):
             'views': data['views'],
             'emotion': data['emotion'],
             'created': data['created'],
-            'group': data['wall'],
+            'wall_id': data['wall'],
             }
     posts.append(post)
 
@@ -36,5 +36,10 @@ def save_post(data):
     return posts
 
 
-def update_last_post_id(data):
-    pass
+def update_last_post_id(wall_id, post_id):
+    # wall = db_session.query(Wall).filter(Wall.wall_id == wall_id).first()[0]
+    wall = Wall.query.filter_by(wall_id=wall_id).first()
+    wall.last_post_id = post_id
+    # db_session.bulk_insert_mappings(Wall, wall, return_defaults=True)
+    db_session.commit()
+    return wall
