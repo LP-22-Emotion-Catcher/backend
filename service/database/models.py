@@ -10,6 +10,7 @@ class Wall(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Integer)
     link = Column(String)
+    last_post_id = Column(Integer)
     # posts = relationship('Post', lazy='joined', backref='walls')
 
     def __repr__(self):

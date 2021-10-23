@@ -5,7 +5,8 @@ from service.database.models import Wall, Post
 def save_wall(data):
     walls = []
     wall = {'name': data['wall'],
-            'link': data['link']
+            'link': data['link'],
+            'last_post_id': data['uid']
             }
     walls.append(wall)
 
@@ -33,3 +34,7 @@ def save_post(data):
     db_session.bulk_insert_mappings(Post, posts, return_defaults=True)
     db_session.commit()
     return posts
+
+
+def update_last_post_id(data):
+    pass
