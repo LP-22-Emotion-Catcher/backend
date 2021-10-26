@@ -2,23 +2,34 @@ import http
 import httpx
 import logging
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
+from pydantic import ValidationError
 from service.config import emotion_url
 
 from service.database.loader import save_wall, save_post, update_last_post_id, save_comment
 from service.database import queries
 
 app = Flask(__name__)
+logger = logging.getLogger(__name__)
 
 
 @app.route("/api/v1/messages", methods=['POST'])
 def process_message():
-    data = request.json
+    try:
+        data = request.json
+    except ValidationError as e:
+        abort(400, str(e))
     text = data['text']
     payload = {'text': text}
-    emotion = httpx.post(emotion_url, json=payload)
+
+    try:
+        emotion = httpx.post(emotion_url, json=payload)
+    except httpx.ConnectError:
+        logger.debug('can\'t connect with emotion service')
+
     logging.info('%s: %s\n\n', emotion.json()['emotions'], text)
     data['emotion'] = emotion.json()['emotions']
+
     save_post(data)
     update_last_post_id(wall_id=data['wall'], post_id=data['uid'])
     return '', http.HTTPStatus.CREATED
@@ -26,7 +37,11 @@ def process_message():
 
 @app.route('/api/v1/walls', methods=['POST'])
 def add_wall():
-    data = request.json
+    try:
+        data = request.json
+    except ValidationError as e:
+        abort(400, str(e))
+
     save_wall(data)
     return '', http.HTTPStatus.CREATED
 
@@ -51,7 +66,11 @@ def get_posts(uid):
 
 @app.route("/api/v1/comments", methods=['POST'])
 def process_comment():
-    data = request.json
+    try:
+        data = request.json
+    except ValidationError as e:
+        abort(400, str(e))
+
     save_comment(data)
     return '', http.HTTPStatus.CREATED
 
