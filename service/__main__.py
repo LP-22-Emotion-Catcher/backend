@@ -5,7 +5,7 @@ import logging
 from flask import Flask, request, jsonify
 from service.config import emotion_url
 
-from service.database.loader import save_wall, save_post, update_last_post_id
+from service.database.loader import save_wall, save_post, update_last_post_id, save_comment
 from service.database import queries
 
 app = Flask(__name__)
@@ -47,6 +47,13 @@ def get_posts(uid):
     emotion = request.args.get('emotion')
     posts = queries.get_posts(uid, emotion)
     return jsonify(posts), http.HTTPStatus.OK
+
+
+@app.route("/api/v1/comments", methods=['POST'])
+def process_comment():
+    data = request.json
+    save_comment(data)
+    return '', http.HTTPStatus.CREATED
 
 
 if __name__ == '__main__':
