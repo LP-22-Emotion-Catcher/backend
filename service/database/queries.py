@@ -3,20 +3,27 @@ from service.database.models import Post, Wall
 from dataclasses import dataclass
 
 
-def get_last_post_id(wall_id):
-    last_post_id = db_session.query(Wall.last_post_id).filter(Wall.wall_id == wall_id).first()
-    if last_post_id:
-        return str(last_post_id)
-    else:
-        return None
-
-
 @dataclass
 class WallConfig:
     uid: int
     wall_id: int
     link: str
     last_post_id: int
+
+
+@dataclass
+class PostConfig:
+    post_id: int
+    text: str
+    emotion: str
+
+
+def get_last_post_id(wall_id):
+    last_post_id = db_session.query(Wall.last_post_id).filter(Wall.wall_id == wall_id).first()
+    if last_post_id:
+        return str(last_post_id)
+    else:
+        return None
 
 
 def get_walls():
@@ -32,17 +39,13 @@ def get_walls():
     ]
 
 
-# Old way, currently not using
-def get_last_post_id2(wall_id):
-    last_post_id = db_session.query(Post.uid).filter(Post.group == wall_id).order_by(Post.created.desc()).first()[0]
-    if last_post_id:
-        return str(last_post_id)
-    else:
-        return None
-
-
-def check_wall_exists(wall_id):
-    wall_exists = db_session.query(Wall.name).filter(Wall.name == int(wall_id))
-    if wall_exists:
-        return True
-    return False
+def get_posts(uid, emotion):
+    posts = Post.query.filter(Post.wall_id == uid).filter(Post.emotion == emotion).all()
+    return [
+        PostConfig(
+            post_id=post.post_id,
+            text=post.text,
+            emotion=post.emotion,
+        )
+        for post in posts
+    ]

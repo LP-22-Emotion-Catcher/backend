@@ -1,7 +1,6 @@
 import http
 import httpx
 import logging
-from dataclasses import asdict
 
 from flask import Flask, request, jsonify
 from service.config import emotion_url
@@ -20,7 +19,6 @@ def process_message():
     emotion = httpx.post(emotion_url, json=payload)
     logging.info('%s: %s\n\n', emotion.json()['emotions'], text)
     data['emotion'] = emotion.json()['emotions']
-    print(data)
     save_post(data)
     update_last_post_id(wall_id=data['wall'], post_id=data['uid'])
     return '', http.HTTPStatus.CREATED

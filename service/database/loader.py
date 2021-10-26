@@ -37,9 +37,7 @@ def save_post(data):
 
 
 def update_last_post_id(wall_id, post_id):
-    # wall = db_session.query(Wall).filter(Wall.wall_id == wall_id).first()[0]
     wall = Wall.query.filter_by(wall_id=wall_id).first()
     wall.last_post_id = post_id
-    # db_session.bulk_insert_mappings(Wall, wall, return_defaults=True)
     db_session.commit()
     return wall
