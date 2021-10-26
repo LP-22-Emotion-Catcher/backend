@@ -1,5 +1,5 @@
 from service.database.db import db_session
-from service.database.models import Wall, Post
+from service.database.models import Wall, Post, Comment
 
 
 def save_wall(data):
@@ -41,3 +41,20 @@ def update_last_post_id(wall_id, post_id):
     wall.last_post_id = post_id
     db_session.commit()
     return wall
+
+
+def save_comment(data):
+    comments = []
+    comment = {
+        'comment_id': data['uid'],
+        'post_id': data['post_id'],
+        'author_id': data['author_id'],
+        'text': data['text'],
+        'date_of_publishing': data['date_of_publishing'],
+        'wall_id': data['wall_id'],
+        }
+    comments.append(comment)
+
+    db_session.bulk_insert_mappings(Comment, comments, return_defaults=True)
+    db_session.commit()
+    return comments
