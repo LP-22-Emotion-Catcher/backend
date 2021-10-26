@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ARRAY
-from sqlalchemy.orm import relationship
+# from sqlalchemy.orm import relationship
 
 from service.database.db import Base, engine
 
@@ -37,6 +37,21 @@ class Post(Base):
 
     def __repr__(self):
         return f'Post id: {self.id}, text: {self.text}'
+
+
+class Comment(Base):
+    __tablename__ = 'comments'
+
+    id = Column(Integer, primary_key=True)
+    comment_id = Column(Integer)
+    post_id = Column(Integer)
+    author_id = Column(Integer)
+    date_of_publishing = Column(String)
+    wall_id = Column(Integer)
+    text = Column(String)
+
+    def __repr__(self):
+        return f'Post id: {self.id}, name: {self.post_id}'
 
 
 if __name__ == "__main__":
