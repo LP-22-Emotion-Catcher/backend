@@ -45,9 +45,11 @@ def add_wall():
     try:
         data = request.json
     except ValidationError as e:
+        logger.info('break with exception')
         abort(400, str(e))
 
     save_wall(data)
+    logger.info('wall has been created')
     return '', http.HTTPStatus.CREATED
 
 
@@ -81,6 +83,5 @@ def process_comment():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    # app.run(port=5001, debug=True)
-    app.run(host='0.0.0.0')
+    logging.basicConfig(level=logging.INFO)
+    app.run(port=5001, debug=True)
