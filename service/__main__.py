@@ -25,7 +25,12 @@ def process_message():
     try:
         emotion = httpx.post(emotion_url, json=payload)
     except httpx.ConnectError:
-        logger.debug('can\'t connect with emotion service')
+        logger.info('Can\'t connect with emotion service. No emotion color will be saved')
+        data['emotion'] = None
+        save_post(data)
+        logger.info('Post has been saved without emotion color')
+        update_last_post_id(wall_id=data['wall'], post_id=data['uid'])
+        return '', http.HTTPStatus.CREATED
 
     logging.info('%s: %s\n\n', emotion.json()['emotions'], text)
     data['emotion'] = emotion.json()['emotions']
@@ -77,4 +82,5 @@ def process_comment():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    app.run(port=5001, debug=True)
+    # app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0')
