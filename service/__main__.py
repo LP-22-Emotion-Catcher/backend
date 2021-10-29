@@ -25,7 +25,7 @@ def process_message():
     payload = {'text': text}
 
     try:
-        emotion = httpx.post(emotion_url, json=payload)
+        emotion = httpx.post(f'{emotion_url}/api/v1/predict', json=payload)
     except httpx.ConnectError:
         logger.info('Can\'t connect with emotion service. No emotion color will be saved')
         data['emotion'] = None
@@ -88,4 +88,4 @@ def process_comment():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
