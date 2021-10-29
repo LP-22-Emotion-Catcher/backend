@@ -17,7 +17,9 @@ logger = logging.getLogger(__name__)
 def process_message():
     try:
         data = request.json
+        logger.info('Just recieved a query for a wall config')
     except ValidationError as e:
+        logger.info('Some problems with validation')
         abort(400, str(e))
     text = data['text']
     payload = {'text': text}
@@ -28,7 +30,7 @@ def process_message():
         logger.info('Can\'t connect with emotion service. No emotion color will be saved')
         data['emotion'] = None
         save_post(data)
-        logger.info('Post has been saved without emotion color')
+        logger.info('New post has been saved without emotion color')
         update_last_post_id(wall_id=data['wall'], post_id=data['uid'])
         return '', http.HTTPStatus.CREATED
 
@@ -36,7 +38,9 @@ def process_message():
     data['emotion'] = emotion.json()['emotions']
 
     save_post(data)
+    logger.info('New post has been saved with emotion color')
     update_last_post_id(wall_id=data['wall'], post_id=data['uid'])
+    logger.info(f"Last post ID for this wall {data['wall']} was updated")
     return '', http.HTTPStatus.CREATED
 
 
@@ -45,7 +49,7 @@ def add_wall():
     try:
         data = request.json
     except ValidationError as e:
-        logger.info('break with exception')
+        logger.info('Can\'t add a new wall')
         abort(400, str(e))
 
     save_wall(data)
