@@ -2,7 +2,7 @@ import http
 import httpx
 import logging
 
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, make_response
 from pydantic import ValidationError
 from service.config import emotion_url
 
@@ -59,7 +59,10 @@ def add_wall():
 
 @app.route("/api/v1/walls/<uid>", methods=['GET'])
 def process_wall(uid):
-    return queries.get_last_post_id(uid)
+    try:
+        return queries.get_last_post_id(uid)
+    except AttributeError:
+        abort(make_response(jsonify(message=f"Wall with id {uid} doesn\'t exist."), 404))
 
 
 @app.route("/api/v1/walls/", methods=['GET'])
