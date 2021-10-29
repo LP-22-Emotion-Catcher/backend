@@ -12,10 +12,9 @@ services:
     build: .
     env_file: .env
     networks:
-      - backend
+      - emotions
     ports:
       - 5001:5001
 
 networks:
   emotions:
-  backend:
