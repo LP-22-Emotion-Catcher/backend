@@ -49,3 +49,13 @@ def get_posts(uid, emotion):
         )
         for post in posts
     ]
+
+
+def delete_wall(wall_id):
+    wall_to_delete = Wall.query.filter(Wall.id == wall_id).first()
+    db_session.delete(wall_to_delete)
+    db_session.commit()
+
+
+def check_wall(wall_id):
+    return Wall.query.filter(str(Wall.id) == wall_id).count() > 0
