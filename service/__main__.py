@@ -72,7 +72,7 @@ def process_wall(uid: int):
 
 
 @app.route("/api/v1/walls/<uid>", methods=['DELETE'])
-def process_delete(uid: int):
+def delete_wall(uid: int):
     try:
         queries.delete_wall(uid)
         return '', 204
@@ -106,5 +106,4 @@ def process_comment():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    # app.run(host='0.0.0.0', port=5000, debug=True)
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
