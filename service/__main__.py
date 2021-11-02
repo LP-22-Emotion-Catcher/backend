@@ -51,16 +51,31 @@ def add_wall():
     except ValidationError as e:
         logger.info('Can\'t add a new wall')
         abort(400, str(e))
-
-    save_wall(data)
-    logger.info('wall has been created')
-    return '', http.HTTPStatus.CREATED
+    try:
+        wall_id = int(data['wall'])
+    except ValueError:
+        return '', http.HTTPStatus.BAD_REQUEST
+    if not queries.check_wall(wall_id):
+        save_wall(data)
+        logger.info('wall has been created')
+        return '', http.HTTPStatus.CREATED
+    logger.info('such wall already exists')
+    return '', http.HTTPStatus.BAD_REQUEST
 
 
 @app.route("/api/v1/walls/<uid>", methods=['GET'])
-def process_wall(uid):
+def process_wall(uid: int):
     try:
         return queries.get_last_post_id(uid)
+    except AttributeError:
+        abort(make_response(jsonify(message=f"Wall with id {uid} doesn\'t exist."), 404))
+
+
+@app.route("/api/v1/walls/<uid>", methods=['DELETE'])
+def delete_wall(uid: int):
+    try:
+        queries.delete_wall(uid)
+        return '', 204
     except AttributeError:
         abort(make_response(jsonify(message=f"Wall with id {uid} doesn\'t exist."), 404))
 
