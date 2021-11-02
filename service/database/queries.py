@@ -58,4 +58,4 @@ def delete_wall(wall_id):
 
 
 def check_wall(wall_id):
-    return Wall.query.filter(str(Wall.id) == wall_id).count() > 0
+    return Wall.query.filter(Wall.wall_id == wall_id).count() > 0
